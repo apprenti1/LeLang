@@ -2,7 +2,12 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "*.html.twig": "html",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "string.h": "c",
+        "ctype.h": "c",
+        "lexer.h": "c",
+        "libgen.h": "c",
+        "assert.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
