@@ -279,7 +279,7 @@ void listPrint(List *list)
     int index = 0;
     while (current != NULL)
     {
-        printf("| %s -> ", index++);
+        printf("| %i -> ", index++);
         switch (current->type){
             case CHAR:
                 printf("%c | ", *(char *)(current->item));

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
-#include "../include/Var.h"
+#include "Var.h"
 
 void test_varListInit()
 {
@@ -11,7 +11,7 @@ void test_varListInit()
     assert(list->head == NULL);
     assert(list->size == 0);
     varListFree(list);
-    printf("\033[32mOK\033[0m | test_varListInit\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varListInit\n");
 }
 
 void test_varAdd()
@@ -41,7 +41,7 @@ void test_varAdd()
 
     assert(list->size == 7);
     varListFree(list);
-    printf("\033[32mOK\033[0m | test_varAdd\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varAdd\n");
 }
 
 void test_varGet()
@@ -76,7 +76,7 @@ void test_varGet()
     assert(varGetShort(list, "short") == 1);
     assert(varGetLong(list, "long") == 1);
     varListFree(list);
-    printf("\033[32mOK\033[0m | test_varGet\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varGet\n");
 }
 
 void test_varDelete()
@@ -119,7 +119,7 @@ void test_varDelete()
     varDelete(list, "long");
     assert(list->size == 0);
     varListFree(list);
-    printf("\033[32mOK\033[0m | test_varDelete\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varDelete\n");
 }
 
 int main()

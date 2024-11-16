@@ -15,7 +15,7 @@ void test_listInit()
     assert(list->head == NULL);
     assert(list->size == 0);
     ListFree(list);
-    printf("\033[32mOK\033[0m | test_listInit\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_listInit\n");
 }
 
 void test_listAdd()
@@ -53,7 +53,7 @@ void test_listAdd()
 
     assert(list->size == 7);
     ListFree(list);
-    printf("\033[32mOK\033[0m | test_listAdd\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_listAdd\n");
 }
 
 void test_listGet()
@@ -89,7 +89,7 @@ void test_listGet()
     assert(listGetLong(list, 5) == 6);
     assert(strcmp(listGetString(list, 6), "string") == 0);
     ListFree(list);
-    printf("\033[32mOK\033[0m | test_listGet\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_listGet\n");
 }
 
 void test_listDelete()
@@ -133,7 +133,7 @@ void test_listDelete()
     listDelete(list, 0);
     assert(list->size == 0);
     ListFree(list);
-    printf("\033[32mOK\033[0m | test_listDelete\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_listDelete\n");
 }
 
 void cest_chainedchainedStringInit()
@@ -143,7 +143,7 @@ void cest_chainedchainedStringInit()
     assert(string->head == NULL);
     assert(string->size == 0);
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | cest_chainedchainedStringInit\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | cest_chainedchainedStringInit\n");
 }
 
 void test_chainedStringAppend()
@@ -159,7 +159,7 @@ void test_chainedStringAppend()
     chainedStringAppend(string, 'h');
     assert(string->size == 8);
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | test_chainedStringAppend\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_chainedStringAppend\n");
 }
 
 void test_chainedStringGet()
@@ -182,7 +182,7 @@ void test_chainedStringGet()
     assert(chainedStringGet(*string, 6) == 'g');
     assert(chainedStringGet(*string, 7) == 'h');
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | test_chainedStringGet\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_chainedStringGet\n");
 }
 
 void test_chainedstringDelete()
@@ -214,7 +214,7 @@ void test_chainedstringDelete()
     chainedstringdelete(string, 0);
     assert(string->size == 0);
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | test_chainedstringDelete\n");
+    printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_chainedstringDelete\n");
 }
 
 int main()
