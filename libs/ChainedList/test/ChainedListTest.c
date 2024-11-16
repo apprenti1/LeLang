@@ -1,6 +1,11 @@
 //!  gcc -o build/test/ChainedListTest libs/ChainedList/test/ChainedListTest.c libs/ChainedList/src/ChainedList.c -Ilibs/ChainedList/include && ./build/test/ChainedListTest
 
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
+#include <ctype.h>
 #include "ChainedList.h"
 
 void test_listInit()
@@ -131,43 +136,43 @@ void test_listDelete()
     printf("\033[32mOK\033[0m | test_listDelete\n");
 }
 
-void cest_chainedChainedQSringInit()
+void cest_chainedchainedStringInit()
 {
-    ChainedString *string = chainedQSringInit();
+    ChainedString *string = chainedStringInit();
     assert(string != NULL);
     assert(string->head == NULL);
     assert(string->size == 0);
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | cest_chainedChainedQSringInit\n");
+    printf("\033[32mOK\033[0m | cest_chainedchainedStringInit\n");
 }
 
-void test_chainedStringAdd()
+void test_chainedStringAppend()
 {
-    ChainedString *string = chainedQSringInit();
-    chainedStringAdd(string, 'a');
-    chainedStringAdd(string, 'b');
-    chainedStringAdd(string, 'c');
-    chainedStringAdd(string, 'd');
-    chainedStringAdd(string, 'e');
-    chainedStringAdd(string, 'f');
-    chainedStringAdd(string, 'g');
-    chainedStringAdd(string, 'h');
+    ChainedString *string = chainedStringInit();
+    chainedStringAppend(string, 'a');
+    chainedStringAppend(string, 'b');
+    chainedStringAppend(string, 'c');
+    chainedStringAppend(string, 'd');
+    chainedStringAppend(string, 'e');
+    chainedStringAppend(string, 'f');
+    chainedStringAppend(string, 'g');
+    chainedStringAppend(string, 'h');
     assert(string->size == 8);
     chainedStringFree(string);
-    printf("\033[32mOK\033[0m | test_chainedStringAdd\n");
+    printf("\033[32mOK\033[0m | test_chainedStringAppend\n");
 }
 
 void test_chainedStringGet()
 {
-    ChainedString *string = chainedQSringInit();
-    chainedStringAdd(string, 'a');
-    chainedStringAdd(string, 'b');
-    chainedStringAdd(string, 'c');
-    chainedStringAdd(string, 'd');
-    chainedStringAdd(string, 'e');
-    chainedStringAdd(string, 'f');
-    chainedStringAdd(string, 'g');
-    chainedStringAdd(string, 'h');
+    ChainedString *string = chainedStringInit();
+    chainedStringAppend(string, 'a');
+    chainedStringAppend(string, 'b');
+    chainedStringAppend(string, 'c');
+    chainedStringAppend(string, 'd');
+    chainedStringAppend(string, 'e');
+    chainedStringAppend(string, 'f');
+    chainedStringAppend(string, 'g');
+    chainedStringAppend(string, 'h');
     assert(chainedStringGet(*string, 0) == 'a');
     assert(chainedStringGet(*string, 1) == 'b');
     assert(chainedStringGet(*string, 2) == 'c');
@@ -182,15 +187,15 @@ void test_chainedStringGet()
 
 void test_chainedstringDelete()
 {
-    ChainedString *string = chainedQSringInit();
-    chainedStringAdd(string, 'a');
-    chainedStringAdd(string, 'b');
-    chainedStringAdd(string, 'c');
-    chainedStringAdd(string, 'd');
-    chainedStringAdd(string, 'e');
-    chainedStringAdd(string, 'f');
-    chainedStringAdd(string, 'g');
-    chainedStringAdd(string, 'h');
+    ChainedString *string = chainedStringInit();
+    chainedStringAppend(string, 'a');
+    chainedStringAppend(string, 'b');
+    chainedStringAppend(string, 'c');
+    chainedStringAppend(string, 'd');
+    chainedStringAppend(string, 'e');
+    chainedStringAppend(string, 'f');
+    chainedStringAppend(string, 'g');
+    chainedStringAppend(string, 'h');
     assert(string->size == 8);
     chainedstringdelete(string, 0);
     assert(string->size == 7);
@@ -218,8 +223,8 @@ int main()
     test_listAdd();
     test_listGet();
     test_listDelete();
-    cest_chainedChainedQSringInit();
-    test_chainedStringAdd();
+    cest_chainedchainedStringInit();
+    test_chainedStringAppend();
     test_chainedStringGet();
     test_chainedstringDelete();
     return 0;

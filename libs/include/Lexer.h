@@ -1,6 +1,14 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+
+#include <string.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "ChainedList.h"
+
 typedef enum {
     TOKEN_KEYWORD,
     TOKEN_IDENTIFIER,
@@ -21,6 +29,6 @@ typedef struct {
     char value[64];
 } Token;
 
-void lex(const char *code, Token *tokens, int *token_count);
+void lex(const char *code, List *tokens, int *token_count);
 
 #endif

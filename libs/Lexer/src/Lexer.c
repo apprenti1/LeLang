@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "ChainedList.h"
+
 typedef enum {
     TOKEN_KEYWORD,
     TOKEN_IDENTIFIER,
@@ -20,7 +22,7 @@ typedef enum {
 
 typedef struct {
     TokenType type;
-    char value[64];
+    char *value;
 } Token;
 
 const char *keywords[] = {"int", "float", "char", "void", NULL};
@@ -34,50 +36,32 @@ int is_keyword(const char *word) {
     return 0;
 }
 
-void add_token(Token *tokens, int *count, TokenType type, const char *value) {
-    tokens[*count].type = type;
-    strncpy(tokens[*count].value, value, sizeof(tokens[*count].value) - 1);
-    tokens[*count].value[sizeof(tokens[*count].value) - 1] = '\0';
-    (*count)++;
+void add_token(List *tokens, int *count, TokenType type, const char *value) {
+    Token *token = malloc(sizeof(Token));
+    token->type = type;
+    token->value = malloc(strlen(value) + 1);
+    strcpy(token->value, value);
+    listAdd(tokens, CUSTOM, token);
 }
 
-void lex(const char *code, Token *tokens, int *token_count) {
+void lex(const char *code, List *tokens, int *token_count) {
     int i = 0;
-    ChainedString *buffer = stringInit();
-
-    if (!buffer) {
-        perror("Erreur d'allocation mémoire");
-        exit(1);
-    }
-
+    ChainedString *buffer = chainedStringInit();
     while (code[i] != '\0') {
         if (isspace(code[i])) {
             i++;
             continue;
         }
-
-        int j = 0;  
-
+        int j = 0;
         if (isalpha(code[i])) {
             while (isalpha(code[i]) || isdigit(code[i])) {
-                if (j + 1 >= buffer_size) {
-                    buffer_size *= 2;
-                    char *temp = realloc(buffer, buffer_size);
-                    if (!temp) {
-                        free(buffer);
-                        perror("Erreur de réallocation mémoire");
-                        exit(1);
-                    }
-                    buffer = temp;
-                }
-                buffer[j++] = code[i++];
+                chainedStringAppend(buffer, code[i]);
+                i++;
             }
-            buffer[j] = '\0';
-
-            if (is_keyword(buffer)) {
-                add_token(tokens, token_count, TOKEN_KEYWORD, buffer);
+            if (is_keyword(chainedStringRender(*buffer))) {
+                add_token(tokens, token_count, TOKEN_KEYWORD, chainedStringRender(*buffer));
             } else {
-                add_token(tokens, token_count, TOKEN_IDENTIFIER, buffer);
+                add_token(tokens, token_count, TOKEN_IDENTIFIER, chainedStringRender(*buffer));
             }
         } else {
             i++;

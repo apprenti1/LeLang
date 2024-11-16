@@ -82,7 +82,7 @@ List *listInit()
     return list;
 }
 
-ChainedString *chainedQSringInit()
+ChainedString *chainedStringInit()
 {
     ChainedString *list = malloc(sizeof(ChainedString));
     if (list == NULL)
@@ -140,7 +140,7 @@ void listAdd(List *list, const ListType type, void *item)
     list->size++;
 }
 
-void chainedStringAdd(ChainedString *string, char character) {
+void chainedStringAppend(ChainedString *string, char character) {
     if (string == NULL) {
         printf("Erreur : La chaîne est NULL\n");
         return;
@@ -246,8 +246,6 @@ void listDelete(List *list, int id)
     }
 }
 
-
-
 void chainedstringdelete(ChainedString *string, int id)
 {
     ListNode *current = string->head;
@@ -331,7 +329,6 @@ void listAddChar(List *list, char item)
     *value = item;
     listAdd(list, CHAR, value);
 }
-
 void listAddShort(List *list, short item)
 {
     short *value = malloc(sizeof(short));
@@ -363,7 +360,6 @@ void listAddDouble(List *list, double item)
     listAdd(list, DOUBLE, value);
 }
 
-
 char listGetChar(List *list, int id)
 {
     return *(char *)(listGet(list, id));
@@ -376,7 +372,6 @@ int listGetInt(List *list, int id)
 {
     return *(int *)(listGet(list, id));
 }
-
 long listGetLong(List *list, int id)
 {
     return *(long *)(listGet(list, id));

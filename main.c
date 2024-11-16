@@ -6,6 +6,8 @@
 #include <limits.h>
 #include <string.h>
 #include "Lexer.h"
+#include "ChainedList.h"
+
 
 char* getArgument(int argc, char *argv[]) {
     if (argc < 2) {
@@ -56,7 +58,7 @@ int main(int argc, char *argv[]) {
     //printf("%s", content);
 
     int token_count = 0;
-    Token *tokens = malloc(sizeof(Token)*(token_count));
+    List *tokens = listInit();
 
     lex(content, tokens, &token_count);
 
@@ -75,10 +77,11 @@ int main(int argc, char *argv[]) {
         "fin de commande",
         "ensemble non reconnu"
     };
-
+/*
     for (int i = 0; i < token_count; i++) {
         printf("Token Type: %s, Value: %s\n", token_type_names[tokens[i].type], tokens[i].value);
     }
+*/
 
 
 
