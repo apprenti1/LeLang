@@ -26,9 +26,9 @@ typedef enum {
 
 typedef struct {
     TokenType type;
-    char value[64];
+    char *value;
 } Token;
 
-void lex(const char *code, List *tokens, int *token_count);
+void lex(const char *code, List *tokens);
 
 #endif

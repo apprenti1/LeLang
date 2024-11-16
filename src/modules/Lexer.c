@@ -36,18 +36,19 @@ int is_keyword(const char *word) {
     return 0;
 }
 
-void add_token(List *tokens, int *count, TokenType type, const char *value) {
+void add_token(List *tokens, TokenType type, const char *value) {
     Token *token = malloc(sizeof(Token));
     token->type = type;
+
     token->value = malloc(strlen(value) + 1);
     strcpy(token->value, value);
     listAdd(tokens, CUSTOM, token);
 }
 
-void lex(const char *code, List *tokens, int *token_count) {
+void lex(const char *code, List *tokens) {
     int i = 0;
-    ChainedString *buffer = chainedStringInit();
     while (code[i] != '\0') {
+    ChainedString *buffer = chainedStringInit();
         if (isspace(code[i])) {
             i++;
             continue;
@@ -59,13 +60,86 @@ void lex(const char *code, List *tokens, int *token_count) {
                 i++;
             }
             if (is_keyword(chainedStringRender(*buffer))) {
-                add_token(tokens, token_count, TOKEN_KEYWORD, chainedStringRender(*buffer));
+                add_token(tokens, TOKEN_KEYWORD, chainedStringRender(*buffer));
             } else {
-                add_token(tokens, token_count, TOKEN_IDENTIFIER, chainedStringRender(*buffer));
+                add_token(tokens, TOKEN_IDENTIFIER, chainedStringRender(*buffer));
             }
+        } else if (isdigit(code[i])) {
+            int j = 0;
+            while (isdigit(code[i])) {
+                chainedStringAppend(buffer, code[i]);
+                i++;
+            }
+            add_token(tokens, TOKEN_NUMBER, chainedStringRender(*buffer));
         } else {
-            i++;
+            switch (code[i]) {
+                case '=':
+                    if (code[i+1] == '=') {
+                        add_token(tokens, TOCKEN_TEST, "==");
+                        i += 2;
+                    } else {
+                        add_token(tokens, TOCKEN_DEFINITION, "=");
+                        i++;
+                    }
+                    break;
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                    {
+                        char op[2] = {code[i], '\0'};
+                        add_token(tokens, TOKEN_OPERATOR, op);
+                        i++;
+                    }
+                    break;
+                case ';':
+                    add_token(tokens, TOKEN_DELIMITER, ";");
+                    i++;
+                    break;
+                case ',':
+                    add_token(tokens, TOKEN_COMMA, ",");
+                    i++;
+                    break;
+                case '(':
+                    add_token(tokens, TOKEN_PARENTHESIS_OPEN, "(");
+                    i++;
+                    break;
+                case ')':
+                    add_token(tokens, TOKEN_PARENTHESIS_CLOSE, ")");
+                    i++;
+                    break;
+                case '\"':
+                    {
+                        char buffer[64];
+                        int j = 0;
+                        buffer[j++] = code[i++];
+                        while (code[i] != '\"' && code[i] != '\0') {
+                            buffer[j++] = code[i++];
+                        }
+                        buffer[j++] = code[i++];
+                        buffer[j] = '\0';
+                        add_token(tokens, TOKEN_STRING, buffer);
+                    }
+                    break;
+                case '\'':
+                    {
+                        char buffer[64];
+                        int j = 0;
+                        buffer[j++] = code[i++];
+                        while (code[i] != '\'' && code[i] != '\0') {
+                            buffer[j++] = code[i++];
+                        }
+                        buffer[j++] = code[i++];
+                        buffer[j] = '\0';
+                        add_token(tokens, TOKEN_STRING, buffer);
+                    }
+                    break;
+                default:
+                    i++;
+                    break;
+            }
         }
+
     }
 
 }

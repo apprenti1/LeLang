@@ -57,10 +57,9 @@ int main(int argc, char *argv[]) {
 
     //printf("%s", content);
 
-    int token_count = 0;
     List *tokens = listInit();
 
-    lex(content, tokens, &token_count);
+    lex(content, tokens);
 
 
     const char *token_type_names[] = {
@@ -77,11 +76,19 @@ int main(int argc, char *argv[]) {
         "fin de commande",
         "ensemble non reconnu"
     };
-/*
-    for (int i = 0; i < token_count; i++) {
-        printf("Token Type: %s, Value: %s\n", token_type_names[tokens[i].type], tokens[i].value);
+
+    ListNode *current = tokens->head;
+    int index = 0;
+    while (current != NULL)
+    {
+        //printf("%s\n", ((Token *)(current->item))->value);
+        printf("| %i -> %s | %s\n", index++, token_type_names[((Token *)(current->item))->type], ((Token *)(current->item))->value);
+        //printf("| %i -> %s\n", index++, ((Token *)(current->item))->value);
+
+        current = current->next;
+
     }
-*/
+
 
 
 
@@ -89,6 +96,8 @@ int main(int argc, char *argv[]) {
 
     free(content);
     
+
+
 
     return 0;
 }

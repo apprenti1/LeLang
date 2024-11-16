@@ -21,7 +21,10 @@ default:
 	@echo "\033[1;36m|  \033[0mmain.c"
 	@echo "\033[1;36m|  \033[0mgcc -o build/main main.c src/modules/* -Isrc/includes"
 	@gcc -o build/main main.c src/modules/* -Isrc/includes
-	@echo "\033[1;36m|----------Main Compiled----------|\033[0m"
+	@echo "\033[1;36m|----------Main Compiled----------|\033[0m\n\n"
+	
+
+	@./build/main test.lang
 
 
 
