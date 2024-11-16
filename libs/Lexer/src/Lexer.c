@@ -43,8 +43,7 @@ void add_token(Token *tokens, int *count, TokenType type, const char *value) {
 
 void lex(const char *code, Token *tokens, int *token_count) {
     int i = 0;
-    int buffer_size = 64;
-    char *buffer = malloc(buffer_size);
+    ChainedString *buffer = stringInit();
 
     if (!buffer) {
         perror("Erreur d'allocation mémoire");
@@ -60,10 +59,9 @@ void lex(const char *code, Token *tokens, int *token_count) {
         int j = 0;  
 
         if (isalpha(code[i])) {
-            // Identifiants et mots-clés
             while (isalpha(code[i]) || isdigit(code[i])) {
                 if (j + 1 >= buffer_size) {
-                    buffer_size *= 2; // Double la taille du buffer si nécessaire
+                    buffer_size *= 2;
                     char *temp = realloc(buffer, buffer_size);
                     if (!temp) {
                         free(buffer);
