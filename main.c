@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
     lex(content, tokens);
 
-    varAddFloat(varList, "a", 1);
+    // varAddFloat(varList, "a", 1);
 
     printTokens(tokens);
 

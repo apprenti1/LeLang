@@ -1,2 +1,9 @@
-int a = 33+2; printf('%i|%f', 6*8, a);
-a==7;
+int a = 0;
+while (a < 10) {
+    a = a + 1;
+    printf("Current value of a: %i", a);
+}
+
+for (int i = 0; i < 5; i++) {
+    printf("Loop iteration: %i", i);
+}

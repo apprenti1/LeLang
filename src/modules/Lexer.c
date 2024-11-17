@@ -26,7 +26,7 @@ typedef struct {
     char *value;
 } Token;
 
-const char *keywords[] = {"int", "float", "char", "void", NULL};
+const char *keywords[] = {"int", "float", "char", "void", "while", "for", NULL};
 
 int is_keyword(const char *word) {
     for (int i = 0; keywords[i] != NULL; i++) {
@@ -49,33 +49,43 @@ void add_token(List *tokens, TokenType type, const char *value) {
 void lex(const char *code, List *tokens) {
     int i = 0;
     while (code[i] != '\0') {
-    ChainedString *buffer = chainedStringInit();
+        ChainedString *buffer = chainedStringInit();
+
         if (isspace(code[i])) {
             i++;
             continue;
         }
-        int j = 0;
+
         if (isalpha(code[i])) {
             while (isalpha(code[i]) || isdigit(code[i])) {
                 chainedStringAppend(buffer, code[i]);
                 i++;
             }
+
+            // add while or for
             if (is_keyword(chainedStringRender(*buffer))) {
-                add_token(tokens, TOKEN_KEYWORD, chainedStringRender(*buffer));
+                if (strcmp(chainedStringRender(*buffer), "while") == 0) {
+                    add_token(tokens, TOKEN_KEYWORD, "while");
+                } else if (strcmp(chainedStringRender(*buffer), "for") == 0) {
+                    add_token(tokens, TOKEN_KEYWORD, "for");
+                } else {
+                    add_token(tokens, TOKEN_KEYWORD, chainedStringRender(*buffer));
+                }
             } else {
                 add_token(tokens, TOKEN_IDENTIFIER, chainedStringRender(*buffer));
             }
-        } else if (isdigit(code[i])) {
-            int j = 0;
+        }
+        else if (isdigit(code[i])) {
             while (isdigit(code[i])) {
                 chainedStringAppend(buffer, code[i]);
                 i++;
             }
             add_token(tokens, TOKEN_NUMBER, chainedStringRender(*buffer));
-        } else {
+        }
+        else {
             switch (code[i]) {
                 case '=':
-                    if (code[i+1] == '=') {
+                    if (code[i + 1] == '=') {
                         add_token(tokens, TOCKEN_TEST, "==");
                         i += 2;
                     } else {
@@ -140,7 +150,6 @@ void lex(const char *code, List *tokens) {
                     break;
             }
         }
-
     }
 
 }
