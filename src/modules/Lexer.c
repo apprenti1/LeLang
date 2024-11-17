@@ -18,6 +18,11 @@ typedef enum {
     TOKEN_PARENTHESIS_CLOSE,
     TOKEN_COMMA,
     TOKEN_DELIMITER,
+    //add comparison
+    TOKEN_COMPARISON_LT,    // Pour `<`
+    TOKEN_COMPARISON_GT,    // Pour `>`
+    TOKEN_COMPARISON_LE,    // Pour `<=`
+    TOKEN_COMPARISON_GE,    // Pour `>=`
     TOKEN_UNKNOWN
 } TokenType;
 
@@ -84,6 +89,25 @@ void lex(const char *code, List *tokens) {
         }
         else {
             switch (code[i]) {
+                case '<':
+                    if (code[i + 1] == '=') {  
+                        add_token(tokens, TOKEN_OPERATOR, "<=");
+                        i += 2; 
+                    } else {  
+                        add_token(tokens, TOKEN_OPERATOR, "<");
+                        i++;
+                    }
+                break;
+
+                case '>':
+                    if (code[i + 1] == '=') {  
+                        add_token(tokens, TOKEN_OPERATOR, ">=");
+                        i += 2; 
+                        } else {  
+                            add_token(tokens, TOKEN_OPERATOR, ">");
+                            i++;
+                        }
+                break;
                 case '=':
                     if (code[i + 1] == '=') {
                         add_token(tokens, TOCKEN_TEST, "==");
