@@ -7,6 +7,7 @@
 #include <string.h>
 #include "Lexer.h"
 #include "ChainedList.h"
+#include "Parser.h"
 
 
 char* getArgument(int argc, char *argv[]) {
@@ -27,7 +28,31 @@ char* getArgument(int argc, char *argv[]) {
     return resolvedPath;
 }
 
+void printTokens(List *tokens) {
+const char *token_type_names[] = {
+        "type de variable\t\t\t",
+        "nom de variable ou fonction\t",
+        "opérateur, +,-,*,/\t\t",
+        "définission d'une variable\t",
+        "test d'égalité\t\t\t",
+        "nombre\t\t\t\t",
+        "décimal\t\t\t\t",
+        "chaine de char\t\t\t",
+        "parenthese ouvrante\t\t",
+        "parenthese fermante\t\t",
+        "virgule\t\t\t\t",
+        "fin de commande\t\t\t",
+        "ensemble non reconnu"
+    };
 
+    ListNode *current = tokens->head;
+    int index = 0;
+    while (current != NULL)
+    {
+        printf("| %i -> %s | %s\n", index++, token_type_names[((Token *)(current->item))->type], ((Token *)(current->item))->value);
+        current = current->next;
+    }
+}
 
 int main(int argc, char *argv[]) {
     
@@ -58,46 +83,19 @@ int main(int argc, char *argv[]) {
     //printf("%s", content);
 
     List *tokens = listInit();
+    VarList *varList = varListInit();
 
     lex(content, tokens);
 
+    varAddFloat(varList, "a", 1);
 
-    const char *token_type_names[] = {
-        "type de variable",
-        "nom de variable ou fonction",
-        "opérateur, +,-,*,/",
-        "définission d'une variable",
-        "test d'égalité",
-        "nombre",
-        "chaine de char",
-        "parenthese ouvrante",
-        "parenthese fermante",
-        "virgule",
-        "fin de commande",
-        "ensemble non reconnu"
-    };
+    printTokens(tokens);
 
-    ListNode *current = tokens->head;
-    int index = 0;
-    while (current != NULL)
-    {
-        //printf("%s\n", ((Token *)(current->item))->value);
-        printf("| %i -> %s | %s\n", index++, token_type_names[((Token *)(current->item))->type], ((Token *)(current->item))->value);
-        //printf("| %i -> %s\n", index++, ((Token *)(current->item))->value);
-
-        current = current->next;
-
-    }
-
-
-
-
+    parseTokens(tokens, varList);
+    printTokens(tokens);
 
 
     free(content);
-    
-
-
-
+    ListFree(tokens);
     return 0;
 }

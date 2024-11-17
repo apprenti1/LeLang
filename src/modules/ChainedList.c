@@ -1,24 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "Var.h"
 
 
-typedef enum
-{
-    INT,
-    FLOAT,
-    DOUBLE,
-    CHAR,
-    SHORT,
-    LONG,
-    STRING,
-    CUSTOM
-} ListType;
 
 typedef struct ListNode
 {
     void *item;
-    ListType type;
+    VarType type;
     struct ListNode *next;
 } ListNode;
 
@@ -96,7 +86,7 @@ ChainedString *chainedStringInit()
 }
 
 
-void listAdd(List *list, const ListType type, void *item)
+void listAdd(List *list, const VarType type, void *item)
 {
 
     ListNode *new;

@@ -8,10 +8,11 @@ typedef enum
     INT,
     FLOAT,
     DOUBLE,
-    LONGDOUBLE,
     CHAR,
     SHORT,
-    LONG
+    LONG,
+    STRING,
+    CUSTOM
 } VarType;
 
 typedef struct VarNode
@@ -124,7 +125,7 @@ void varAdd(VarList *list, const VarType type, const char *name, void *item)
     }
     list->size++;
 }
-void *varGet(VarList *list, const char *name)
+VarNode *varGetNode(VarList *list, const char *name)
 {
     if (list == NULL)
     {
@@ -141,10 +142,19 @@ void *varGet(VarList *list, const char *name)
     {
         if (strcmp(current->name, name) == 0)
         {
-            return current->item;
+            return current;
         }
         current = current->next;
     }
+    return NULL;
+}
+void *varGet(VarList *list, const char *name)
+{
+    if (varGetNode(list, name) != NULL)
+    {
+        return varGetNode(list, name)->item;
+    }
+    
     return NULL;
 }
 
@@ -209,9 +219,6 @@ void varListPrint(VarList *list)
             case DOUBLE:
                 printf("%lf | ", *(double *)(current->item));
                 break;
-            case LONGDOUBLE:
-                printf("%ld | ", *(long double *)(current->item));
-                break;
         }
         current = current->next;
     }
@@ -254,12 +261,6 @@ void varAddDouble(VarList *list, const char *name, double item)
     *value = item;
     varAdd(list, DOUBLE, name, value);
 }
-void varAddLongDouble(VarList *list, const char *name, long double item)
-{
-    long double *value = malloc(sizeof(long double));
-    *value = item;
-    varAdd(list, LONGDOUBLE, name, value);
-}
 
 char varGetChar(VarList *list, const char *name)
 {
@@ -286,8 +287,5 @@ double varGetDouble(VarList *list, const char *name)
 {
     return *(double *)(varGet(list, name));
 }
-long double varGetLongDouble(VarList *list, const char *name)
-{
-    return *(long double *)(varGet(list, name));
-}
+
 

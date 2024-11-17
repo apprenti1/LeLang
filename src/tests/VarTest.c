@@ -14,6 +14,7 @@ void test_varListInit()
     printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varListInit\n");
 }
 
+
 void test_varAdd()
 {
     VarList *list = varListInit();
@@ -26,9 +27,6 @@ void test_varAdd()
     value = malloc(sizeof(double));
     *(double *)value = 1.0;
     varAdd(list, DOUBLE, "double", value);
-    value = malloc(sizeof(long double));
-    *(long double *)value = 1.0;
-    varAdd(list, LONGDOUBLE, "longdouble", value);
     value = malloc(sizeof(char));
     *(char *)value = 'c';
     varAdd(list, CHAR, "char", value);
@@ -39,7 +37,7 @@ void test_varAdd()
     *(long *)value = 1;
     varAdd(list, LONG, "long", value);
 
-    assert(list->size == 7);
+    assert(list->size == 6);
     varListFree(list);
     printf("\033[1;32m|  \033[0m\033[32mOK\033[0m | test_varAdd\n");
 }
@@ -56,9 +54,6 @@ void test_varGet()
     value = malloc(sizeof(double));
     *(double *)value = 1.0;
     varAdd(list, DOUBLE, "double", value);
-    value = malloc(sizeof(long double));
-    *(long double *)value = 1.0;
-    varAdd(list, LONGDOUBLE, "longdouble", value);
     value = malloc(sizeof(char));
     *(char *)value = 'c';
     varAdd(list, CHAR, "char", value);
@@ -71,7 +66,6 @@ void test_varGet()
     assert(varGetInt(list, "int") == 1);
     assert(varGetFloat(list, "float") == 1.0);
     assert(varGetDouble(list, "double") == 1.0);
-    assert(varGetLongDouble(list, "longdouble") == 1.0);
     assert(varGetChar(list, "char") == 'c');
     assert(varGetShort(list, "short") == 1);
     assert(varGetLong(list, "long") == 1);
@@ -91,9 +85,6 @@ void test_varDelete()
     value = malloc(sizeof(double));
     *(double *)value = 1.0;
     varAdd(list, DOUBLE, "double", value);
-    value = malloc(sizeof(long double));
-    *(long double *)value = 1.0;
-    varAdd(list, LONGDOUBLE, "longdouble", value);
     value = malloc(sizeof(char));
     *(char *)value = 'c';
     varAdd(list, CHAR, "char", value);
@@ -103,14 +94,12 @@ void test_varDelete()
     value = malloc(sizeof(long));
     *(long *)value = 1;
     varAdd(list, LONG, "long", value);
-    assert(list->size == 7);
-    varDelete(list, "int");
     assert(list->size == 6);
-    varDelete(list, "float");
+    varDelete(list, "int");
     assert(list->size == 5);
-    varDelete(list, "double");
+    varDelete(list, "float");
     assert(list->size == 4);
-    varDelete(list, "longdouble");
+    varDelete(list, "double");
     assert(list->size == 3);
     varDelete(list, "char");
     assert(list->size == 2);

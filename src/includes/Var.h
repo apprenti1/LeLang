@@ -11,10 +11,11 @@ typedef enum
     INT,
     FLOAT,
     DOUBLE,
-    LONGDOUBLE,
     CHAR,
     SHORT,
-    LONG
+    LONG,
+    STRING,
+    CUSTOM
 } VarType;
 
 typedef struct VarNode
@@ -35,6 +36,7 @@ void varNodeFree(VarNode *node);
 void varListFree(VarList *list);
 VarList *varListInit();
 void varAdd(VarList *list, const VarType type, const char *name, void *item);
+VarNode *varGetNode(VarList *list, const char *name);
 void *varGet(VarList *list, const char *name);
 void varDelete(VarList *list, const char *name);
 void varListPrint(VarList *list);
