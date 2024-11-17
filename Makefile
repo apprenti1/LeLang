@@ -24,7 +24,7 @@ default:
 	@echo "\033[1;36m|----------Main Compiled----------|\033[0m\n\n"
 	
 
-	@./build/main test.lang
+	@./build/main
 
 
 

@@ -39,6 +39,7 @@ ChainedString *chainedStringInit();
 void listAdd(List *list, const VarType type, void *item);
 void chainedStringAppend(ChainedString *string, char character);
 
+ListNode *listGetNode(List *list, int id);
 void *listGet(List *list, int id);
 char chainedStringGet(ChainedString string, int id);
 

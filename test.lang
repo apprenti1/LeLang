@@ -1,2 +1,4 @@
-int a = 33+2; printf('%i|%f', 6*8, a);
+int a = 33+2; 
+printf('Ethan\n');
+printf(a'test');
 a==7;

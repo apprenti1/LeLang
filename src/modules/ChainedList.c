@@ -167,7 +167,8 @@ void chainedStringAppend(ChainedString *string, char character) {
 }
 
 
-void *listGet(List *list, int id)
+
+ListNode *listGetNode(List *list, int id)
 {
     if (list == NULL)
     {
@@ -180,13 +181,24 @@ void *listGet(List *list, int id)
     {
         if (currentid == id)
         {
-            return current->item;
+            return current;
         }
         currentid++;
         current = current->next;
     }
     return NULL;
 }
+void *listGet(List *list, int id)
+{
+    if (listGetNode(list, id) != NULL)
+    {
+        return listGetNode(list, id)->item;
+    }
+    
+    return NULL;
+}
+
+
 
 char chainedStringGet(ChainedString string, int id)
 {

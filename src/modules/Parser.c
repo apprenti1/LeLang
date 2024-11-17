@@ -3,6 +3,7 @@
 #include "Lexer.h"
 #include "Var.h"
 
+// Fonction pour évaluer une opération mathématique
 double evaluateOperation(double a, double b, char operator)
 {
     switch (operator)
@@ -10,7 +11,7 @@ double evaluateOperation(double a, double b, char operator)
     case '*':
         return a * b;
     case '/':
-        return b != 0 ? a / b : 0;
+        return b != 0 ? a / b : 0; // Protection contre division par zéro
     case '+':
         return a + b;
     case '-':
@@ -31,8 +32,9 @@ double evaluateOperation(double a, double b, char operator)
 *    "TOKEN_NUMBER"=>"2"
 *    ]
      --> verrifie si il y a des variables stocké identifiable, si oui les remplace dans les tockens
-    todo verrifie si il y a des * ou / , si oui fait les calculs et les remplace dans les tockens
-    todo verrifie si il y a une execution de fonction primaire si oui execute
+     --> verrifie si il y a des * ou / , si oui fait les calculs et les remplace dans les tockens
+     --> verrifie si il y a des + ou - , si oui fait les calculs et les remplace dans les tockens
+     ..> verrifie si il y a une execution de fonction primaire si oui execute
     todo verrifie si il y a une definition de variable, si oui
     todo verrifier qu'il ne reste qu'une valeur unique dans la définition (int,float, string) si oui
     todo stocker la variable
@@ -45,7 +47,7 @@ void parseExpression(List *tokens, int endIndex, VarList *varList)
     for (int i = 0; i < endIndex; i++)
     {
         Token *token = listGet(tokens, i);
-        if (token && token->type == TOKEN_IDENTIFIER)
+        if (token && token->type == TOKEN_IDENTIFIER && (!listGet(tokens, i + 1) || ((Token *)listGet(tokens, i + 1))->type != TOCKEN_DEFINITION))
         {
 
             VarNode *var = varGetNode(varList, token->value);
@@ -87,9 +89,10 @@ void parseExpression(List *tokens, int endIndex, VarList *varList)
                 double result = evaluateOperation(a, b, token->value[0]);
                 token->type = TOKEN_FLOAT;
                 sprintf(token->value, "%f", result);
-                listDelete(tokens, i + 1);
-                listDelete(tokens, i - 1);
+                prevToken->type = TOKEN_UNKNOWN;
+                nextToken->type = TOKEN_UNKNOWN;
                 endIndex -= 2;
+                i -= 2;
             }
         }
     }
@@ -127,10 +130,115 @@ void parseExpression(List *tokens, int endIndex, VarList *varList)
                 listDelete(tokens, i + 1);
                 listDelete(tokens, i - 1);
                 endIndex -= 2;
+                i -= 2;
             }
         }
     }
-/
+
+    // functions
+    for (int i = 0; i < endIndex; i++)
+    {
+        if (((Token *)listGet(tokens, i))->type == TOKEN_IDENTIFIER)
+        {
+
+            if (strcmp(((Token *)listGet(tokens, i))->value, "printf") == 0 && ((Token *)listGet(tokens, i + 1))->type == TOKEN_PARENTHESIS_OPEN)
+            {
+                int j = i + 2;
+                while (j < endIndex && ((Token *)listGet(tokens, j))->type != TOKEN_PARENTHESIS_CLOSE)
+                {
+                    printf("%s", ((Token *)listGet(tokens, j))->value);
+                    listDelete(tokens, j);
+                    endIndex--;
+                }
+                // printf("\n");
+                listDelete(tokens, i);
+                listDelete(tokens, i);
+                listDelete(tokens, i);
+                endIndex -= 3;
+            }
+            if (strcmp(((Token *)listGet(tokens, i))->value, "scanf") == 0 && ((Token *)listGet(tokens, i + 1))->type == TOKEN_PARENTHESIS_OPEN)
+            {
+                int j = i + 2;
+                while (j < endIndex && ((Token *)listGet(tokens, j))->type != TOKEN_PARENTHESIS_CLOSE)
+                {
+                    Token *t = (Token *)listGet(tokens, j);
+                    if (t->type == TOKEN_IDENTIFIER)
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    // redef variable
+    for (int i = 0; i < endIndex; i++)
+    {
+        if (((Token *)listGet(tokens, i))->type == TOKEN_IDENTIFIER && 
+        ((Token *)listGet(tokens, i + 1))->type == TOCKEN_DEFINITION && 
+        (!((Token *)listGet(tokens, i - 1)) ||
+        ((Token *)listGet(tokens, i - 1))->type != TOKEN_KEYWORD )
+        )
+        {
+            printf("Found variable:\n");
+            VarNode *var = varGetNode(varList, ((Token *)listGet(tokens, i))->value);
+            var->item = ((void*)((Token *)listGet(tokens, i + 2))->value);
+           listDelete(tokens, i);
+           listDelete(tokens, i);
+           listDelete(tokens, i);
+           endIndex -= 3;
+        }
+    }
+
+    // Add variables
+    for (int i = 0; i < endIndex; i++)
+    {
+        if (((Token *)listGet(tokens, i))->type == TOKEN_KEYWORD && ((Token *)listGet(tokens, i + 1))->type == TOKEN_IDENTIFIER && ((Token *)listGet(tokens, i + 2))->type == TOCKEN_DEFINITION)
+        {
+            int j = i + 3;
+            while (j < endIndex && ((Token *)listGet(tokens, j))->type != TOKEN_DELIMITER)
+            {
+                j++;
+            }
+            if (j == i + 4)
+            {
+                if (strcmp(((Token *)listGet(tokens, i))->value, "int") == 0)
+                {
+                    varAddInt(varList, ((Token *)listGet(tokens, i + 1))->value, atoi(((Token *)listGet(tokens, i + 3))->value));
+                }
+                else if (strcmp(((Token *)listGet(tokens, i))->value, "float") == 0)
+                {
+                    varAddFloat(varList, ((Token *)listGet(tokens, i + 1))->value, atof(((Token *)listGet(tokens, i + 3))->value));
+                }
+            }
+
+            // printf("!!!!!!%i|%i\n", i, j);
+        }
+    }
+
+    //
+    for (int i = 0; i < endIndex; i++)
+    {
+        if (((Token *)listGet(tokens, i + 1))->type == TOKEN_IDENTIFIER && ((Token *)listGet(tokens, i + 2))->type == TOCKEN_DEFINITION)
+        {
+            int j = i + 3;
+            while (j < endIndex && ((Token *)listGet(tokens, j))->type != TOKEN_DELIMITER)
+            {
+                j++;
+            }
+            if (j == i + 4)
+            {
+            }
+        }
+    }
+
+    for (int i = 0; i < endIndex; i++)
+    {
+        Token *token = listGet(tokens, i);
+        if (token && token->type == TOKEN_UNKNOWN)
+        {
+            continue;
+        }
+    }
 }
 
 /*
@@ -188,14 +296,17 @@ void parseTokens(List *tokens, VarList *varList)
         {
             if (token->type == TOKEN_DELIMITER && strcmp(token->value, ";") == 0)
             {
+
                 parseExpression(tokens, lastExpressionIndex, varList);
                 printf("expression parsed\n");
-                lastExpressionIndex = i + 1;
             }
+            lastExpressionIndex = i + 1;
         }
         current = current->next;
         i++;
     }
+
+    // S'il reste des tokens non parsés après le dernier point-virgule
     if (lastExpressionIndex < tokens->size)
     {
         parseExpression(tokens, lastExpressionIndex, varList);
