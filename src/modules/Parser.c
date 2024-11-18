@@ -89,8 +89,9 @@ void parseExpression(List *tokens, int endIndex, VarList *varList)
                 double result = evaluateOperation(a, b, token->value[0]);
                 token->type = TOKEN_FLOAT;
                 sprintf(token->value, "%f", result);
-                prevToken->type = TOKEN_UNKNOWN;
-                nextToken->type = TOKEN_UNKNOWN;
+                
+                listDelete(tokens, i + 1);
+                listDelete(tokens, i - 1);
                 endIndex -= 2;
                 i -= 2;
             }
@@ -147,14 +148,14 @@ void parseExpression(List *tokens, int endIndex, VarList *varList)
                 while (j < endIndex && ((Token *)listGet(tokens, j))->type != TOKEN_PARENTHESIS_CLOSE)
                 {
                     printf("%s", ((Token *)listGet(tokens, j))->value);
-                    listDelete(tokens, j);
+                    //listDelete(tokens, j);
                     endIndex--;
                 }
                 // printf("\n");
                 listDelete(tokens, i);
-                listDelete(tokens, i);
-                listDelete(tokens, i);
-                endIndex -= 3;
+                //listDelete(tokens, i);
+                //listDelete(tokens, i);
+                //endIndex -= 3;
             }
             if (strcmp(((Token *)listGet(tokens, i))->value, "scanf") == 0 && ((Token *)listGet(tokens, i + 1))->type == TOKEN_PARENTHESIS_OPEN)
             {
